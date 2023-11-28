@@ -10,10 +10,13 @@ images:
     src: /images/mario/hills.png
   mario:
     src: /images/mario_animation.png
+  goomba:
+    src: /images/goomba_animation.png
 ---
 <!-- Liquid code, run by Jekyll, used to define location of asset(s) -->
 {% assign backgroundFile = site.baseurl | append: page.images.background.src %}
 {% assign playerFile = site.baseurl | append: page.images.mario.src %}
+{% assign goombaFile = site.baseurl | append: page.images.goomba.src %}
 
 <style>
     #controls {
@@ -36,6 +39,7 @@ images:
     import GameObject from '{{site.baseurl}}/assets/js/mario/GameObject.js';
     import Background from '{{site.baseurl}}/assets/js/mario/Background.js';
     import { initPlayer } from '{{site.baseurl}}/assets/js/mario/Player.js';
+    import { initGoomba } from '{{site.baseurl}}/assets/js/mario/Goomba.js';
 
     // Create a function to load an image and return a Promise
     async function loadImage(src) {
@@ -67,9 +71,10 @@ images:
     async function setupGame() {
         try {
             // Open image files for Game Objects
-            const [backgroundImg, playerImg] = await Promise.all([
+            const [backgroundImg, playerImg, goombaImg] = await Promise.all([
                 loadImage('{{backgroundFile}}'),
                 loadImage('{{playerFile}}'),
+                loadImage('{{goombaFile}}'),
             ]);
 
             // Setup Globals
@@ -91,6 +96,14 @@ images:
             // Player object
             const playerSpeedRatio = 0.7
             initPlayer(playerCanvas, playerImg, playerSpeedRatio);
+
+
+              // Prepare HTML with Goomba Canvas
+            const goombaCanvas = document.createElement("canvas");
+            goombaCanvas.id = "goomba";
+            document.querySelector("#canvasContainer").appendChild(goombaCanvas);
+            const goombaSpeedRatio = 0.5
+            initGoomba(goombaCanvas, goombaImg, goombaSpeedRatio);
 
         // Trap errors on failed image loads
         } catch (error) {

@@ -7,19 +7,19 @@ const DogAnimation = {
     scale: 0.62,
     width: 160,
     height: 144,
-	idle: { row: 0, frames: 47 },
-	barking: { row: 1, frames: 47 },
-	walking: { row: 2, frames: 47 }
+    idle: { row: 0, frames: 47 },
+    barking: { row: 1, frames: 47 },
+    walking: { row: 2, frames: 47 }
 }
 
-export class CharacterDog extends Character{
+export class CharacterDog extends Character {
     // constructors sets up Character object 
-    constructor(dogCanvas, image, speedRatio){
-        super(dogCanvas, 
-            image, 
+    constructor(dogCanvas, image, speedRatio) {
+        super(dogCanvas,
+            image,
             speedRatio,
-            DogAnimation.width, 
-            DogAnimation.height, 
+            DogAnimation.width,
+            DogAnimation.height,
             DogAnimation.scale
         );
         this.sceneStarted = false;
@@ -28,22 +28,21 @@ export class CharacterDog extends Character{
     // Dog perform a unique update
     update() {
         if (this.frameY === DogAnimation.walking.row) {
-            this.x -= this.speed;  // Move the dog to the left
             // Check if the dog has moved off the left edge of the canvas
             if (this.x < -this.canvas.width) {
                 this.x = GameEnv.innerWidth; // Reset the dog's x position to the right edge
             }
         }
-        
+
         // Perform super update actions (collision checks)
         super.update();
     }
 
     // override default action
-    collisionAction(){
+    collisionAction() {
         // If the scene has started then don't run the collision event code
         // With collision data we can even determine which side the dog is colliding on
-        if (this.sceneStarted === false && this.collisionData.touchPoints.this.left){
+        if (this.sceneStarted === false && this.collisionData.touchPoints.this.left) {
             this.sceneStarted = true;
 
             // Dog starts to bark at monkey for three seconds
@@ -63,12 +62,11 @@ export class CharacterDog extends Character{
             }, 3000);
         }
     }
-
 }
 
 // Can add specific initialization parameters for the dog here
-// In this case the dog is following the default character initialization
-export function initDog(canvasId, image, speedRatio, controls){
+// In this case, the dog is following the default character initialization
+export function initDog(canvasId, image, speedRatio, controls) {
     // Create the Dog character
     var dog = new CharacterDog(canvasId, image, speedRatio);
 
@@ -76,15 +74,28 @@ export function initDog(canvasId, image, speedRatio, controls){
     dog.setFrameY(DogAnimation.walking.row);
     dog.setMaxFrame(DogAnimation.walking.frames);
 
-    /* Dog Control for Animation
-    * changes FrameY value (selected animation is idle, bark, walk)
-    * change MaxFrame according to value in selected animation
-    */
+    // Dog Control for Animation
+    // Change animation based on the selected input (idle, bark, walk)
     controls.addEventListener('click', function (event) {
         if (event.target.tagName === 'INPUT') {
             const selectedAnimation = event.target.id;
             dog.setFrameY(DogAnimation[selectedAnimation].row);
             dog.setMaxFrame(DogAnimation[selectedAnimation].frames);
+        }
+    });
+
+    // Dog Movement with Arrow Keys
+    window.addEventListener('keydown', function (event) {
+        switch (event.key) {
+            case 'ArrowLeft':
+                // Move the dog to the left when the left arrow key is pressed
+                dog.x -= dog.speed;
+                break;
+            case 'ArrowRight':
+                
+                dog.x += dog.speed;
+                break;
+           
         }
     });
 

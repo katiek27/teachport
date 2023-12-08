@@ -1,9 +1,9 @@
 title: Teacher 2.0
 description: "August 2023 to June 2024"
-owner_name: John Mortensen
-github_username: jm1021
-github_repo: "teacher_portfolio"
-baseurl: "/teacher_portfolio"
+owner_name: Katie Kim
+github_username: katiek27
+github_repo: "teachtwo"
+baseurl: "/teachtwo"
 future: true
 remote_theme: jekyll/minima
 minima:

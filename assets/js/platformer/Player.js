@@ -1,6 +1,60 @@
 import GameEnv from './GameEnv.js';
 import Character from './Character.js';
+import deathController from './Death.js';
 
+// export async function gameOverCallBack() {
+//     const id = document.getElementById("gameOver");
+//     id.hidden = false;
+  
+//     // Use waitForRestart to wait for the restart button click
+//     await waitForButton('restartGame');
+//     id.hidden = true;
+  
+//     // Change currentLevel to start/restart value of null
+//     GameEnv.currentLevel = null;
+//     return true;
+//   }
+export  function waitForButton(buttonName) {
+  // resolve the button click
+  return new Promise((resolve) => {
+      const waitButton = document.getElementById(buttonName);
+      const waitButtonListener = () => {
+          resolve(true);
+      };
+      waitButton.addEventListener('click', waitButtonListener);
+  });
+}
+
+// Start button callback
+export async function startGameCallback() {
+  const id = document.getElementById("gameBegin");
+  id.hidden = false;
+  // Use waitForRestart to wait for the restart button click
+  await waitForButton('startGame');
+  id.hidden = true;
+  return true;
+}
+
+// Home screen exits on Game Begin button
+export function homeScreenCallback() {
+  // gameBegin hidden means game has started
+  const id = document.getElementById("gameBegin");
+  return id.hidden;
+}
+
+// Game Over callback
+export async function gameOverCallBack() {
+  const id = document.getElementById("gameOver");
+  id.hidden = false;
+
+  // Use waitForRestart to wait for the restart button click
+  await waitForButton('restartGame');
+  id.hidden = true;
+
+  // Change currentLevel to start/restart value of null
+  GameEnv.currentLevel = null;
+  return true;
+}
 export class Player extends Character{
     // constructors sets up Character object 
     constructor(canvas, image, speedRatio, playerData){
@@ -137,6 +191,30 @@ export class Player extends Character{
             this.movement.right = true;
             this.movement.down = true;
         }
+        // Enemy collision
+        if (this.collisionData.touchPoints.other.id === "enemy") {
+            // Collision with the left side of the Enemy
+            if (this.collisionData.touchPoints.other.left) {
+                deathController.setDeath(1);
+                this.destroy();
+                waitForButton();
+                homeScreenCallback();
+                gameOverCallBack();
+            }
+            // Collision with the right side of the Enemy
+            if (this.collisionData.touchPoints.other.right) {
+                deathController.setDeath(1);
+                this.destroy();
+                waitForButton();
+                homeScreenCallback();
+                gameOverCallBack();
+            }
+            // Collision with the top of the Enemy
+            if (this.collisionData.touchPoints.other.ontop) {
+                this.y -= (this.bottom * 0.33);
+                this.collisionData.touchPoints.other.destroy();
+            }
+          }
     }
     
     // Event listener key down

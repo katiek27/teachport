@@ -23,10 +23,14 @@ image: /images/platformer/backgrounds/hills.png
     <div id="controls"> <!-- Controls -->
         <!-- Background controls -->
         <button id="toggleCanvasEffect">Invert</button>
+        <button id="leaderboardButton">Leaderboard</button>
     </div>
     <div id="gameOver" hidden>
         <button id="restartGame">Restart</button>
     </div>
+</div>
+<div id="score" style="position: absolute; top: 75px; left: 10px; color: black; font-size: 20px; background-color: white;">
+    Time: <span id="timeScore">0</span>
 </div>
 
 <script type="module">
@@ -80,8 +84,32 @@ image: /images/platformer/backgrounds/hills.png
           s: { row: 12, frames: 15 },
           d: { row: 0, frames: 15, idleFrame: { column: 7, frames: 0 } }
         }
+      },
+      enemies: {
+        goomba: {
+          src: "/images/platformer/sprites/goomba.png",
+          width: 448,
+          height: 452,
+        }
       }
-    };
+    }
+
+  // Function to switch to the leaderboard screen
+    function showLeaderboard() {
+
+    // Hide game canvas and controls
+    document.getElementById('canvasContainer').style.display = 'none';
+    document.getElementById('controls').style.display = 'none';
+
+    // Create and display leaderboard section
+    const leaderboardSection = document.createElement('div');
+    leaderboardSection.id = 'leaderboardSection';
+    leaderboardSection.innerHTML = '<h1 style="text-align: center; font-size: 18px;">Leaderboard </h1>';
+    document.body.appendChild(leaderboardSection);
+}
+
+// Event listener for leaderboard button to be clicked
+document.getElementById('leaderboardButton').addEventListener('click', showLeaderboard);
 
     // add File to assets, ensure valid site.baseurl
     Object.keys(assets).forEach(category => {
@@ -89,6 +117,7 @@ image: /images/platformer/backgrounds/hills.png
         assets[category][assetName]['file'] = "{{site.baseurl}}" + assets[category][assetName].src;
       });
     });
+
 
     /*  ==========================================
      *  ===== Game Level Call Backs ==============
@@ -121,11 +150,9 @@ image: /images/platformer/backgrounds/hills.png
     async function startGameCallback() {
       const id = document.getElementById("gameBegin");
       id.hidden = false;
-      
       // Use waitForRestart to wait for the restart button click
       await waitForButton('startGame');
       id.hidden = true;
-      
       return true;
     }
 
@@ -140,14 +167,13 @@ image: /images/platformer/backgrounds/hills.png
     async function gameOverCallBack() {
       const id = document.getElementById("gameOver");
       id.hidden = false;
-      
+
       // Use waitForRestart to wait for the restart button click
       await waitForButton('restartGame');
       id.hidden = true;
-      
+
       // Change currentLevel to start/restart value of null
       GameEnv.currentLevel = null;
-
       return true;
     }
 
@@ -163,10 +189,12 @@ image: /images/platformer/backgrounds/hills.png
     new GameLevel( {tag: "start", callback: startGameCallback } );
     new GameLevel( {tag: "home", background: assets.backgrounds.start, callback: homeScreenCallback } );
     // Game screens
-    new GameLevel( {tag: "hills", background: assets.backgrounds.hills, platform: assets.platforms.grass, player: assets.players.mario, tube: assets.obstacles.tube, callback: testerCallBack } );
+   new GameLevel( {tag: "hills", background: assets.backgrounds.hills, platform: assets.platforms.grass, player: assets.players.mario, enemy: assets.enemies.goomba, tube: assets.obstacles.tube, callback: testerCallBack } );
     new GameLevel( {tag: "alien", background: assets.backgrounds.planet, platform: assets.platforms.alien, player: assets.players.monkey, callback: testerCallBack } );
     // Game Over screen
     new GameLevel( {tag: "end", background: assets.backgrounds.end, callback: gameOverCallBack } );
+
+
 
     /*  ==========================================
      *  ========== Game Control ==================
@@ -176,7 +204,7 @@ image: /images/platformer/backgrounds/hills.png
     // create listeners
     toggleCanvasEffect.addEventListener('click', GameEnv.toggleInvert);
     window.addEventListener('resize', GameEnv.resize);
-
+    
     // start game
     GameControl.gameLoop();
 

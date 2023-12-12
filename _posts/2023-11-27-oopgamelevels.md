@@ -38,6 +38,7 @@ image: /images/platformer/backgrounds/hills.png
     import GameEnv from '{{site.baseurl}}/assets/js/platformer/GameEnv.js';
     import GameLevel from '{{site.baseurl}}/assets/js/platformer/GameLevel.js';
     import GameControl from '{{site.baseurl}}/assets/js/platformer/GameControl.js';
+    import PlatformO from '{{site.baseurl}}/assets/js/platformer/PlatformO.js';
 
 
     /*  ==========================================
@@ -54,6 +55,12 @@ image: /images/platformer/backgrounds/hills.png
         grass: { src: "/images/platformer/platforms/grass.png" },
         alien: { src: "/images/platformer/platforms/alien.png" }
       },
+      platformO: {
+        grass: { src: "/images/brick_wall.png" },
+     },  
+      thing: { 
+        coin: { src: "/images/Coin.png" } 
+      }, 
       backgrounds: {
         start: { src: "/images/platformer/backgrounds/home.png" },
         hills: { src: "/images/platformer/backgrounds/hills.png" },
@@ -92,7 +99,7 @@ image: /images/platformer/backgrounds/hills.png
           height: 452,
         }
       }
-    }
+    } 
 
   // Function to switch to the leaderboard screen
     function showLeaderboard() {
@@ -189,7 +196,7 @@ document.getElementById('leaderboardButton').addEventListener('click', showLeade
     new GameLevel( {tag: "start", callback: startGameCallback } );
     new GameLevel( {tag: "home", background: assets.backgrounds.start, callback: homeScreenCallback } );
     // Game screens
-   new GameLevel( {tag: "hills", background: assets.backgrounds.hills, platform: assets.platforms.grass, player: assets.players.mario, enemy: assets.enemies.goomba, tube: assets.obstacles.tube, callback: testerCallBack } );
+   new GameLevel( {tag: "hills", background: assets.backgrounds.hills, platform: assets.platforms.grass, platformO: assets.platformO.grass, thing: assets.thing.coin, player: assets.players.mario, enemy: assets.enemies.goomba, tube: assets.obstacles.tube, callback: testerCallBack, } );
     new GameLevel( {tag: "alien", background: assets.backgrounds.planet, platform: assets.platforms.alien, player: assets.players.monkey, callback: testerCallBack } );
     // Game Over screen
     new GameLevel( {tag: "end", background: assets.backgrounds.end, callback: gameOverCallBack } );

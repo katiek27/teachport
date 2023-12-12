@@ -54,7 +54,7 @@ export class Enemy extends Character {
                 this.canvas.style.transform = 'scale(1)';
                 this.specialActionActive = false; 
                 // Reset the flag after the timeout
-            }, 5000);
+            }, 9000);
             // Set the flag to indicate that the special action is active
             this.specialActionActive = true;
         }     

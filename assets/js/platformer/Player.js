@@ -162,7 +162,7 @@ export class Player extends Character{
             if (this.movement.right) this.x += this.speed;  // Move to right
         }
         if (this.isGravityAnimation("w")) {
-            if (this.movement.down) this.y -= (this.bottom * .33);  // jump 33% higher than bottom
+            if (this.movement.down) this.y -= (this.bottom * .50);  // jump 33% higher than bottom
         } 
 
         // Perform super update actions
@@ -180,6 +180,7 @@ export class Player extends Character{
             if (this.collisionData.touchPoints.other.right) {
                 this.movement.left = false;
             }
+            
             // Collision with the top of the player
             if (this.collisionData.touchPoints.other.ontop) {
                 this.movement.down = false;
@@ -190,7 +191,58 @@ export class Player extends Character{
             this.movement.left = true;
             this.movement.right = true;
             this.movement.down = true;
+            this.topOfPlatform = false;
+            this.movement.left = true;  
+            this.movement.right = true;
+            this.movement.down = true;
+            this.gravityEnabled = true;
         }
+              //platform collision
+              if (this.collisionData.touchPoints.other.id === "jumpPlatform") {
+                // Collision with the left side of the Platform
+                console.log("id")
+                if (this.collisionData.touchPoints.other.left && (this.topOfPlatform === true)) {
+                    this.movement.right = false;
+                    console.log("a")
+                }
+                // Collision with the right side of the platform
+                if (this.collisionData.touchPoints.other.right && (this.topOfPlatform === true)) {
+                    this.movement.left = false;
+                    console.log("b")
+                }
+                if (this.collisionData.touchPoints.other.id === "thing2") {
+                    // Collision with the left side of the Tube
+                    if (this.collisionData.touchPoints.coin.left) {
+                        this.touchCoin = true;
+                        console.log("o")
+                        window.location.reload();
+                    }
+                    // Collision with the right side of the Tube
+                    if (this.collisionData.touchPoints.coin.right) {
+                        console.log("p")
+                        this.touchCoin = true;
+                        window.location.reload();
+                    }
+                }  
+                // Collision with the top of the player
+                if (this.collisionData.touchPoints.this.ontop) {
+                    this.gravityEnabled = false;
+                    console.log("c")
+                }
+                if (this.collisionData.touchPoints.this.bottom) {
+                    this.gravityEnabled = false;
+                    console.log("d")
+                }
+                if (this.collisionData.touchPoints.this.top) {
+                    this.gravityEnabled = false;
+                    this.topOfPlatform = true; 
+                    console.log(this.topOfPlatform + "top")
+                    console.log(this.gravityEnabled + "grav")
+                    //console.log("e");
+                }
+                
+            }
+
         // Enemy collision
         if (this.collisionData.touchPoints.other.id === "enemy") {
             // Collision with the left side of the Enemy

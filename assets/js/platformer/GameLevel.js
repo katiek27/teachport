@@ -4,6 +4,8 @@ import Platform from './Platform.js';
 import Player from './Player.js';
 import Tube from './Tube.js';
 import Enemy from './Enemy.js';
+import PlatformO from './PlatformO.js';
+import Thing1 from './Thing1.js';
 
 // Store the assets and attributes of the Game at the specific GameLevel.
 class GameLevel {
@@ -12,6 +14,8 @@ class GameLevel {
         this.tag = gameObject?.tag;
         this.backgroundImg = gameObject.background?.file;
         this.platformImg = gameObject.platform?.file;
+        this.platformOImg = gameObject.platformO?.file; // courtesy of platformo
+        this.thingImg = gameObject.thing?.file; 
         this.playerImg = gameObject.player?.file;
         this.playerData = gameObject?.player;
         this.enemyImg = gameObject.enemy?.file;
@@ -31,6 +35,12 @@ class GameLevel {
         }
         if (this.platformImg) {
             imagesToLoad.push(this.loadImage(this.platformImg));
+        }
+        if (this.platformOImg) {
+            imagesToLoad.push(this.loadImage(this.platformOImg));
+        }
+        if (this.thingImg) {
+            imagesToLoad.push(this.loadImage(this.thingImg));
         }
         if (this.playerImg) {
             imagesToLoad.push(this.loadImage(this.playerImg));
@@ -64,6 +74,22 @@ class GameLevel {
                 document.querySelector("#canvasContainer").appendChild(platformCanvas);
                 const platformSpeedRatio = 0;
                 new Platform(platformCanvas, loadedImages[i], platformSpeedRatio);
+                i++;
+            }
+            if (this.platformOImg) {
+                const platformCanvas = document.createElement("canvas");
+                platformCanvas.id = "jumpPlatform";
+                const platformSpeedRatio = 0;
+                document.querySelector("#canvasContainer").appendChild(platformCanvas);
+                new PlatformO(platformCanvas, loadedImages[i], platformSpeedRatio);
+                i++
+            }
+            if (this.thingImg) {
+                const platformCanvas = document.createElement("canvas");
+                platformCanvas.id = "thing2";
+                document.querySelector("#canvasContainer").appendChild(platformCanvas);
+                const platformSpeedRatio = 0;
+                new Thing1(platformCanvas, loadedImages[i], platformSpeedRatio);
                 i++;
             }
 
@@ -110,6 +136,7 @@ class GameLevel {
             image.onerror = reject;
         });
     }
+    
 }
-
+ 
 export default GameLevel;

@@ -55,6 +55,7 @@ export async function gameOverCallBack() {
   GameEnv.currentLevel = null;
   return true;
 }
+
 export class Player extends Character{
     // constructors sets up Character object 
     constructor(canvas, image, speedRatio, playerData){
@@ -215,18 +216,20 @@ export class Player extends Character{
                     if (this.collisionData.touchPoints.coin.left) {
                         this.touchCoin = true;
                         console.log("o")
-                        window.location.reload();
+                        // window.location.reload();
+                        this.removeThing2Element();
                     }
                     // Collision with the right side of the Tube
                     if (this.collisionData.touchPoints.coin.right) {
                         console.log("p")
                         this.touchCoin = true;
-                        window.location.reload();
+                        // window.location.reload();
+                        this.removeThing2Element();
                     }
                 }  
                 // Collision with the top of the player
                 if (this.collisionData.touchPoints.this.ontop) {
-                    this.gravityEnabled = false;
+                    this.gravityEnabled = true;
                     console.log("c")
                 }
                 if (this.collisionData.touchPoints.this.bottom) {
@@ -234,11 +237,11 @@ export class Player extends Character{
                     console.log("d")
                 }
                 if (this.collisionData.touchPoints.this.top) {
-                    this.gravityEnabled = false;
+                    this.gravityEnabled = true;
                     this.topOfPlatform = true; 
                     console.log(this.topOfPlatform + "top")
                     console.log(this.gravityEnabled + "grav")
-                    //console.log("e");
+                    console.log("e");
                 }
                 
             }
@@ -252,6 +255,7 @@ export class Player extends Character{
                 waitForButton();
                 homeScreenCallback();
                 gameOverCallBack();
+                console.log("leftenemy");
             }
             // Collision with the right side of the Enemy
             if (this.collisionData.touchPoints.other.right) {
@@ -260,11 +264,13 @@ export class Player extends Character{
                 waitForButton();
                 homeScreenCallback();
                 gameOverCallBack();
+                console.log("rightenemy");
             }
             // Collision with the top of the Enemy
             if (this.collisionData.touchPoints.other.ontop) {
                 this.y -= (this.bottom * 0.33);
                 this.collisionData.touchPoints.other.destroy();
+                console.log("topenemy");
             }
           }
     }
@@ -304,7 +310,17 @@ export class Player extends Character{
         // Call the parent class's destroy method
         super.destroy();
     }
+    removeThing2Element() {
+        // Assuming "thing2" is represented by a DOM element
+        const thing2Element = document.getElementById("thing2");
+    
+        if (thing2Element) {
+            // Remove or hide the element as needed
+            thing2Element.parentNode.removeChild(thing2Element); // Remove the element from its parent
+            // OR
+            // thing2Element.style.display = "none"; // Hide the element
+        }
+    }
 }
-
 
 export default Player;

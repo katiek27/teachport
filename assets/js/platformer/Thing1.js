@@ -40,10 +40,10 @@ export class Thing1 extends GameObject {
 
         if (randomPosition) {
             thingX = (GameEnv.innerWidth - scaledWidth) / 2.5;
-            thingY = (GameEnv.innerHeight - scaledHeight) / 1.01;
+            thingY = (GameEnv.innerHeight - scaledHeight) / 1.05;
         } else {
             thingX = (GameEnv.innerWidth - scaledWidth) / 7.5;
-            thingY = (GameEnv.innerHeight - scaledHeight) / 2.02;
+            thingY = (GameEnv.innerHeight - scaledHeight) / 1.05;
         }
 
         // Set variables used in Display and Collision algorithms

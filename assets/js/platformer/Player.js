@@ -103,14 +103,14 @@ export class Player extends Character{
             this.setFrameX(animation.idleFrame.column)
             this.setMinFrame(animation.idleFrame.frames);
         }
-    }i
+    }
     
     // check for matching animation
     isAnimation(key) {
         var result = false;
         if (key in this.pressedKeys) {
-            result = !this.isIdle;
-        }
+            result = (!this.isIdle && (this.topOfPlatform ||this.bottom <= this.y));
+        } 
         
         return result;
     }
@@ -188,63 +188,62 @@ export class Player extends Character{
                 this.x = this.collisionData.touchPoints.other.x;
             }
         } else {
-            // Reset movement flags if not colliding with a tube
             this.movement.left = true;
             this.movement.right = true;
             this.movement.down = true;
             this.topOfPlatform = false;
-            this.movement.left = true;  
+            this.movement.left = true;
             this.movement.right = true;
             this.movement.down = true;
             this.gravityEnabled = true;
-        }
-              //platform collision
-              if (this.collisionData.touchPoints.other.id === "jumpPlatform") {
-                // Collision with the left side of the Platform
-                console.log("id")
-                if (this.collisionData.touchPoints.other.left && (this.topOfPlatform === true)) {
-                    this.movement.right = false;
-                    console.log("a")
-                }
-                // Collision with the right side of the platform
-                if (this.collisionData.touchPoints.other.right && (this.topOfPlatform === true)) {
-                    this.movement.left = false;
-                    console.log("b")
-                }
-                if (this.collisionData.touchPoints.other.id === "thing2") {
-                    // Collision with the left side of the Tube
-                    if (this.collisionData.touchPoints.coin.left) {
-                        this.touchCoin = true;
-                        console.log("o")
-                        // window.location.reload();
-                        this.removeThing2Element();
-                    }
-                    // Collision with the right side of the Tube
-                    if (this.collisionData.touchPoints.coin.right) {
-                        console.log("p")
-                        this.touchCoin = true;
-                        // window.location.reload();
-                        this.removeThing2Element();
-                    }
-                }  
-                // Collision with the top of the player
-                if (this.collisionData.touchPoints.this.ontop) {
-                    this.gravityEnabled = true;
-                    console.log("c")
-                }
-                if (this.collisionData.touchPoints.this.bottom) {
-                    this.gravityEnabled = false;
-                    console.log("d")
-                }
-                if (this.collisionData.touchPoints.this.top) {
-                    this.gravityEnabled = true;
-                    this.topOfPlatform = true; 
-                    console.log(this.topOfPlatform + "top")
-                    console.log(this.gravityEnabled + "grav")
-                    console.log("e");
-                }
-                
+        }    
+            
+        if (this.collisionData.touchPoints.other.id === "thing2") {
+            // Collision with the left side of the Tube
+            console.log(this.collisionData.touchPoints)
+            if (this.collisionData.touchPoints.coin.left) {
+                this.touchCoin = true;
+                console.log("o")
+                window.location.reload();
             }
+            // Collision with the right side of the Tube
+            if (this.collisionData.touchPoints.coin.right) {
+                console.log("p")
+                this.touchCoin = true;
+                window.location.reload();
+            }
+        }     
+            
+          //platformO
+        if (this.collisionData.touchPoints.other.id === "jumpPlatform") {
+            // Collision with the left side of the Platform
+            console.log("id")
+            if (this.collisionData.touchPoints.other.left && (this.topOfPlatform === true)) {
+                this.movement.right = false;
+                console.log("a")
+            }
+            // Collision with the right side of the platform
+            if (this.collisionData.touchPoints.other.right && (this.topOfPlatform === true)) {
+                this.movement.left = false;
+                console.log("b")
+            }
+            // Collision with the top of the player
+            if (this.collisionData.touchPoints.this.ontop) {
+                this.gravityEnabled = false;
+                console.log("c")
+            }
+            if (this.collisionData.touchPoints.this.bottom) {
+                this.gravityEnabled = false;
+                console.log("d")
+            }
+            if (this.collisionData.touchPoints.this.top) {
+                this.gravityEnabled = false;
+                this.topOfPlatform = true;
+                console.log(this.topOfPlatform + "top")
+                console.log(this.gravityEnabled + "grav")
+                //console.log("e");
+            }
+        }
 
         // Enemy collision
         if (this.collisionData.touchPoints.other.id === "enemy") {
@@ -272,11 +271,11 @@ export class Player extends Character{
                 this.collisionData.touchPoints.other.destroy();
                 console.log("topenemy");
             }
-          }
+        }
+
     }
-    
     // Event listener key down
-    handleKeyDown(event) {
+    handleKeyDown(event){
         if (this.playerData.hasOwnProperty(event.key)) {
             const key = event.key;
             if (!(event.key in this.pressedKeys)) {
@@ -289,7 +288,7 @@ export class Player extends Character{
     }
 
     // Event listener key up
-    handleKeyUp(event) {
+    handleKeyUp(event){
         if (this.playerData.hasOwnProperty(event.key)) {
             const key = event.key;
             if (event.key in this.pressedKeys) {
@@ -302,7 +301,7 @@ export class Player extends Character{
     }
 
     // Override destroy() method from GameObject to remove event listeners
-    destroy() {
+    destroy(){
         // Remove event listeners
         document.removeEventListener('keydown', this.keydownListener);
         document.removeEventListener('keyup', this.keyupListener);
@@ -310,7 +309,7 @@ export class Player extends Character{
         // Call the parent class's destroy method
         super.destroy();
     }
-    removeThing2Element() {
+    removeThing2Element(){
         // Assuming "thing2" is represented by a DOM element
         const thing2Element = document.getElementById("thing2");
     

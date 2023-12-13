@@ -121,7 +121,7 @@ export class Player extends Character{
     
         // verify key is in active animations
         if (key in this.pressedKeys) {
-            result = (!this.isIdle && this.bottom <= this.y);
+            result = (!this.isIdle && (this.topOfPlatform ||this.bottom <= this.y));
         }
 
         // scene for on top of tube animation
@@ -138,7 +138,7 @@ export class Player extends Character{
             }, 2000);
         }
     
-        // make sure jump has ssome velocity
+        // make sure jump has some velocity
         if (result) {
             // Adjust horizontal position during the jump
             const horizontalJumpFactor = 0.1; // Adjust this factor as needed

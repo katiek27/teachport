@@ -130,7 +130,7 @@ image: /images/platformer/backgrounds/hills.png
       }
     } 
 
-    localStorage.setItem("playerScores","")
+    // localStorage.setItem("playerScores","")
 
   // Function to switch to the leaderboard screen
     function showLeaderboard() {

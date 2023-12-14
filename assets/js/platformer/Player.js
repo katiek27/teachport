@@ -48,7 +48,7 @@ export async function gameOverCallBack() {
   id.hidden = false;
 
   const playerScore = document.getElementById("timeScore").innerHTML
-  const playerName = prompt('You scored ${playerScore}! What is your name?')
+  const playerName = prompt(`You scored ${playerScore}! What is your name?`)
   let temp = localStorage.getItem("playerScores")
 
   temp += playerName + "," + playerScore.toString() + ";";

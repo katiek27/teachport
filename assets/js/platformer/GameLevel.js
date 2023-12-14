@@ -33,11 +33,11 @@ class GameLevel {
         
         // test for presence of Images
         const imagesToLoad = [];
-        if (this.backgroundImg) {
-            imagesToLoad.push(this.loadImage(this.backgroundImg));
-        }
         if (this.backgroundImg2) {
             imagesToLoad.push(this.loadImage(this.backgroundImg2));
+        }
+        if (this.backgroundImg) {
+            imagesToLoad.push(this.loadImage(this.backgroundImg));
         }
         if (this.platformImg) {
             imagesToLoad.push(this.loadImage(this.platformImg));

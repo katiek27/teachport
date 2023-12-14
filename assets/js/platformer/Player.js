@@ -282,7 +282,7 @@ export class Player extends Character{
 
     }
     // Event listener key down
-    //ask abt this parallax!!!!!
+    
     handleKeyDown(event){
         if (this.playerData.hasOwnProperty(event.key)) {
             const key = event.key;

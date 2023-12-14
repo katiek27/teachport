@@ -1,5 +1,6 @@
 import GameEnv from './GameEnv.js';
 import Background from './Background.js';
+import Background2 from  './Background2.js';
 import Platform from './Platform.js';
 import Player from './Player.js';
 import Tube from './Tube.js';
@@ -7,12 +8,14 @@ import Enemy from './Enemy.js';
 import PlatformO from './PlatformO.js';
 import Thing1 from './Thing1.js';
 
+
 // Store the assets and attributes of the Game at the specific GameLevel.
 class GameLevel {
     constructor(gameObject) {
         // conditional assignments from GameObject to instance variables
         this.tag = gameObject?.tag;
         this.backgroundImg = gameObject.background?.file;
+        this.backgroundImg2 = gameObject.background2?.file;
         this.platformImg = gameObject.platform?.file;
         this.platformOImg = gameObject.platformO?.file; // courtesy of platformo
         this.thingImg = gameObject.thing?.file; 
@@ -32,6 +35,9 @@ class GameLevel {
         const imagesToLoad = [];
         if (this.backgroundImg) {
             imagesToLoad.push(this.loadImage(this.backgroundImg));
+        }
+        if (this.backgroundImg2) {
+            imagesToLoad.push(this.loadImage(this.backgroundImg2));
         }
         if (this.platformImg) {
             imagesToLoad.push(this.loadImage(this.platformImg));
@@ -58,6 +64,14 @@ class GameLevel {
             var i = 0;
 
             // Prepare HTML with Background Canvas (if backgroundImg is defined)
+            if (this.backgroundImg2) {
+                const background2Canvas = document.createElement("canvas");
+                background2Canvas.id = "background2";
+                document.querySelector("#canvasContainer").appendChild(background2Canvas);
+                const background2SpeedRatio = 0;
+                new Background2(background2Canvas, loadedImages[i], background2SpeedRatio);
+                i++;
+            }
             if (this.backgroundImg) {
                 const backgroundCanvas = document.createElement("canvas");
                 backgroundCanvas.id = "background";

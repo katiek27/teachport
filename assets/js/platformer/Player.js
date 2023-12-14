@@ -47,6 +47,13 @@ export async function gameOverCallBack() {
   const id = document.getElementById("gameOver");
   id.hidden = false;
 
+  const playerScore = document.getElementById("timeScore").innerHTML
+  const playerName = prompt('You scored ${playerScore}! What is your name?')
+  let temp = localStorage.getItem("playerScores")
+
+  temp += playerName + "," + playerScore.toString() + ";";
+  localStorage.setItem("playerScores", temp)
+
   // Use waitForRestart to wait for the restart button click
   await waitForButton('restartGame');
   id.hidden = true;
@@ -251,7 +258,7 @@ export class Player extends Character{
             if (this.collisionData.touchPoints.other.left) {
                 deathController.setDeath(1);
                 this.destroy();
-                waitForButton();
+                // waitForButton();
                 homeScreenCallback();
                 gameOverCallBack();
                 console.log("leftenemy");
@@ -275,6 +282,7 @@ export class Player extends Character{
 
     }
     // Event listener key down
+    //ask abt this parallax!!!!!
     handleKeyDown(event){
         if (this.playerData.hasOwnProperty(event.key)) {
             const key = event.key;
@@ -284,7 +292,15 @@ export class Player extends Character{
                 // player active
                 this.isIdle = false;
             }
-        }
+            if (key === "a") {
+                GameEnv.backgroundSpeed2 = -0.1;
+                GameEnv.backgroundSpeed = -0.4;
+            }
+            if (key === "d") {
+                GameEnv.backgroundSpeed2 = 0.1;
+                GameEnv.backgroundSpeed = 0.4;
+            }
+        };
     }
 
     // Event listener key up
@@ -297,8 +313,17 @@ export class Player extends Character{
             this.setAnimation(key);  
             // player idle
             this.isIdle = true;     
+        
+        if (key === "a") {
+            GameEnv.backgroundSpeed2 = 0;
+            GameEnv.backgroundSpeed = 0;
+            }
+        if (key === "d") {
+            GameEnv.backgroundSpeed2 = 0;
+            GameEnv.backgroundSpeed = 0;
+            }
         }
-    }
+    };
 
     // Override destroy() method from GameObject to remove event listeners
     destroy(){

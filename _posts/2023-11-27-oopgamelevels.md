@@ -12,6 +12,34 @@ image: /images/platformer/backgrounds/hills.png
         position: relative;
         z-index: 2; /*Ensure the controls are on top*/
     }
+    #gameBegin, #controls, #gameOver {
+      position: relative;
+      z-index: 2; /*Ensure the controls are on top*/
+    }
+    
+    #toggleCanvasEffect, #background, #platform {
+      animation: fadein 5s;
+    }
+
+    #startGame {
+      animation: flash 0.5s infinite;
+    }
+
+    @keyframes flash {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeout {
+      from {opacity: 1}
+      to {opacity: 0}
+    }
+
+    @keyframes fadein {
+      from {opacity: 0}
+      to {opacity: 1}
+    }
 </style>
 
 <!-- Prepare DOM elements -->
@@ -66,7 +94,8 @@ image: /images/platformer/backgrounds/hills.png
         hills: { src: "/images/platformer/backgrounds/hills.png" },
         planet: { src: "/images/platformer/backgrounds/planet.jpg" },
         castles: { src: "/images/platformer/backgrounds/castles.png" },
-        end: { src: "/images/platformer/backgrounds/game_over.png" }
+        end: { src: "/images/platformer/backgrounds/game_over.png" },
+        mountains: { src: "/images/platformer/backgrounds/mountains.jpg"}
       },
       players: {
         mario: {
@@ -101,18 +130,51 @@ image: /images/platformer/backgrounds/hills.png
       }
     } 
 
+    localStorage.setItem("playerScores","")
+
   // Function to switch to the leaderboard screen
     function showLeaderboard() {
-
-    // Hide game canvas and controls
-    document.getElementById('canvasContainer').style.display = 'none';
-    document.getElementById('controls').style.display = 'none';
+      const id = document.getElementById("gameOver");
+      id.hidden = false;
+      // Hide game canvas and controls
+      document.getElementById('canvasContainer').style.display = 'none';
+      document.getElementById('controls').style.display = 'none';
 
     // Create and display leaderboard section
     const leaderboardSection = document.createElement('div');
     leaderboardSection.id = 'leaderboardSection';
     leaderboardSection.innerHTML = '<h1 style="text-align: center; font-size: 18px;">Leaderboard </h1>';
-    document.body.appendChild(leaderboardSection);
+    document.querySelector(".page-content").appendChild(leaderboardSection)
+    // document.body.appendChild(leaderboardSection);
+
+    const playerScores = localStorage.getItem("playerScores")
+    const playerScoresArray = playerScores.split(";")
+    const scoresObj = {}
+    const scoresArr = []
+    for(let i = 0; i< playerScoresArray.length-1; i++){
+      const temp = playerScoresArray[i].split(",")
+      scoresObj[temp[0]] = parseInt(temp[1])
+      scoresArr.push(parseInt(temp[1]))
+    }
+
+    scoresArr.sort()
+
+    const finalScoresArr = []
+    for (let i = 0; i<scoresArr.length; i++) {
+      for (const [key, value] of Object.entries(scoresObj)) {
+        if (scoresArr[i] ==value) {
+          finalScoresArr.push(key + "," + value)
+          break;
+        }
+      }
+    }
+    let rankScore = 1;
+    for (let i =0; i<finalScoresArr.length; i++) {
+      const rank = document.createElement('div');
+      rank.id = `rankScore${rankScore}`;
+      rank.innerHTML = `<h2 style="text-align: center; font-size: 18px;">${finalScoresArr[i]} </h2>`;
+      document.querySelector(".page-content").appendChild(rank)    
+    }
 }
 
 // Event listener for leaderboard button to be clicked
@@ -196,7 +258,7 @@ document.getElementById('leaderboardButton').addEventListener('click', showLeade
     new GameLevel( {tag: "start", callback: startGameCallback } );
     new GameLevel( {tag: "home", background: assets.backgrounds.start, callback: homeScreenCallback } );
     // Game screens
-   new GameLevel( {tag: "hills", background: assets.backgrounds.hills, platform: assets.platforms.grass, platformO: assets.platformO.grass, thing: assets.thing.coin, player: assets.players.mario, enemy: assets.enemies.goomba, tube: assets.obstacles.tube, callback: testerCallBack, } );
+   new GameLevel( {tag: "hills", background: assets.backgrounds.hills, background2: assets.backgrounds.mountains, platform: assets.platforms.grass, platformO: assets.platformO.grass, thing: assets.thing.coin, player: assets.players.mario, enemy: assets.enemies.goomba, tube: assets.obstacles.tube, callback: testerCallBack, } );
     new GameLevel( {tag: "alien", background: assets.backgrounds.planet, platform: assets.platforms.alien, player: assets.players.monkey, callback: testerCallBack } );
     // Game Over screen
     new GameLevel( {tag: "end", background: assets.backgrounds.end, callback: gameOverCallBack } );

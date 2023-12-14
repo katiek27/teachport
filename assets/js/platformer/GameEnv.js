@@ -20,6 +20,10 @@ export class GameEnv {
     static backgroundHeight = 0;
     static platformHeight = 0;
 
+    //parallax
+    static backgroundSpeed2 = 0;
+    static backgroundSpeed = 0;
+
     // canvas filter property
     static isInverted = true;
 
@@ -115,6 +119,11 @@ let timerInterval; // Variable to hold the interval reference
 
 // Function to update and display the timer
 function updateTimer() {
+    const id = document.getElementById("gameOver");
+    if (id.hidden == false) {
+        stopTimer()
+        time=-1
+    }
    time++; // Increment time (you can adjust this based on your game logic)
 
 
@@ -136,9 +145,9 @@ function startTimer() {
 
 
 // Function to stop the timer
-function stopTimer() {
-   clearInterval(timerInterval); // Clear the interval to stop the timer
-}
+function stopTimer() {   
+    clearInterval(timerInterval); // Clear the interval to stop the timer
+ }
 
 
 // Event listener for the start game button click

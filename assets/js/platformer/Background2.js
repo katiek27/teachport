@@ -1,9 +1,10 @@
 import GameEnv from './GameEnv.js';
 import GameObject from './GameObject.js';
 
-export class Background extends GameObject {
+export class Background2 extends GameObject {
     constructor(canvas, image, speedRatio) {
         super(canvas, image, speedRatio);
+        this.x = -1000;
     }
 
     /* Update uses modulo math to cycle to start at width extent
@@ -12,9 +13,8 @@ export class Background extends GameObject {
     *  width is extent of background image
     */
     update() {
-        this.speed = GameEnv.backgroundSpeed;
+        this.speed = GameEnv.backgroundSpeed2;
         this.x = (this.x - this.speed) % this.width;
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     /* To draws are used to capture primary frame and wrap around ot next frame
@@ -53,4 +53,4 @@ export class Background extends GameObject {
     }
 }
 
-export default Background;
+export default Background2;

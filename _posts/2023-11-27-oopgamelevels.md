@@ -231,7 +231,6 @@ document.getElementById('leaderboardButton').addEventListener('click', showLeade
 
     // Start button callback
     async function startGameCallback() {
-      startGameOver = true;
       const id = document.getElementById("gameBegin");
       id.hidden = false;
       // Use waitForRestart to wait for the restart button click
@@ -248,33 +247,29 @@ document.getElementById('leaderboardButton').addEventListener('click', showLeade
     }
 
     async function gameOverCallBack() {
-      const id = document.getElementById("gameOver");
-      id.hidden = false;
-      // Store whether the game over screen has been shown before
-      const gameOverScreenShown = localStorage.getItem("gameOverScreenShown");
-      gameStartOver = true;
-      // Check if the game over screen has been shown before
-      if (gameStartOver == true) {
-        const playerScore = document.getElementById("timeScore").innerHTML;
-        const playerName = prompt(`You scored ${playerScore}! What is your name?`);
-        let temp = localStorage.getItem("playerScores");
-        temp += playerName + "," + playerScore.toString() + ";";
-        localStorage.setItem("playerScores", temp);
-        gameStartOver = false;
-      // Set a flag in local storage to indicate that the game over screen has been shown
-        localStorage.setItem("gameOverScreenShown", "true");
-      }
-      
-      // Use waitForRestart to wait for the restart button click
-        await waitForButton('restartGame');
-        id.hidden = true;
-        
-        // Change currentLevel to start/restart value of null
-        GameEnv.currentLevel = null;
-        // Reset the flag so that the game over screen can be shown again on the next game over
-        localStorage.removeItem("gameOverScreenShown");
-        return true;
-      }
+  const id = document.getElementById("gameOver");
+  id.hidden = false;
+  // Store whether the game over screen has been shown before
+  const gameOverScreenShown = localStorage.getItem("gameOverScreenShown");
+  // Check if the game over screen has been shown before
+  if (!gameOverScreenShown) {
+    const playerScore = document.getElementById("timeScore").innerHTML;
+    const playerName = prompt(`You scored ${playerScore}! What is your name?`);
+    let temp = localStorage.getItem("playerScores");
+    temp += playerName + "," + playerScore.toString() + ";";
+    localStorage.setItem("playerScores", temp);
+    // Set a flag in local storage to indicate that the game over screen has been shown
+    localStorage.setItem("gameOverScreenShown", "true");
+  }
+  // Use waitForRestart to wait for the restart button click
+  await waitForButton('restartGame');
+  id.hidden = true;
+  // Change currentLevel to start/restart value of null
+  GameEnv.currentLevel = null;
+  // Reset the flag so that the game over screen can be shown again on the next game over
+  localStorage.removeItem("gameOverScreenShown");
+  return true;
+}
 
     /*  ==========================================
      *  ========== Game Level setup ==============

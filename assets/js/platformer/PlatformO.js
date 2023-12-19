@@ -22,7 +22,7 @@ export class PlatformO extends GameObject {
         // Formula for Width is scaled: scaledWidth/scaledHeight == this.width/this.height
         const scaledWidth = 150;
         const platformX = .1 * GameEnv.innerWidth;
-        const platformY = (GameEnv.bottom - scaledHeight) - 150;
+        const platformY = (GameEnv.bottom - scaledHeight) * 0.85;
 
         // set variables used in Display and Collision algorithms
         this.bottom = platformY;

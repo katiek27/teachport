@@ -170,7 +170,7 @@ export class Player extends Character{
             if (this.movement.right) this.x += this.speed;  // Move to right
         }
         if (this.isGravityAnimation("w")) {
-            if (this.movement.down) this.y -= (this.bottom * .50);  // jump 33% higher than bottom
+            if (this.movement.down) this.y -= (this.bottom * .30);  // jump 33% higher than bottom
         } 
 
         // Perform super update actions
@@ -205,21 +205,21 @@ export class Player extends Character{
             this.gravityEnabled = true;
         }    
             
-        if (this.collisionData.touchPoints.other.id === "thing2") {
-            // Collision with the left side of the Tube
-            console.log(this.collisionData.touchPoints)
-            if (this.collisionData.touchPoints.coin.left) {
-                this.touchCoin = true;
-                console.log("o")
-                window.location.reload();
-            }
-            // Collision with the right side of the Tube
-            if (this.collisionData.touchPoints.coin.right) {
-                console.log("p")
-                this.touchCoin = true;
-                window.location.reload();
-            }
-        }     
+        // if (this.collisionData.touchPoints.other.id === "thing2") {
+        //     // Collision with the left side of the Tube
+        //     console.log(this.collisionData.touchPoints)
+        //     if (this.collisionData.touchPoints.coin.left) {
+        //         // this.touchCoin = true;
+        //         // console.log("o")
+        //         // window.location.reload();
+        //     }
+        //     // Collision with the right side of the Tube
+        //     if (this.collisionData.touchPoints.coin.right) {
+        //         // console.log("p")
+        //         // this.touchCoin = true;
+        //         // window.location.reload();
+        //     }
+        // }     
             
           //platformO
         if (this.collisionData.touchPoints.other.id === "jumpPlatform") {
@@ -259,17 +259,17 @@ export class Player extends Character{
                 deathController.setDeath(1);
                 this.destroy();
                 // waitForButton();
-                homeScreenCallback();
-                gameOverCallBack();
+                // homeScreenCallback();
+                // gameOverCallBack();
                 console.log("leftenemy");
             }
             // Collision with the right side of the Enemy
             if (this.collisionData.touchPoints.other.right) {
                 deathController.setDeath(1);
                 this.destroy();
-                waitForButton();
-                homeScreenCallback();
-                gameOverCallBack();
+                // waitForButton();
+                // homeScreenCallback();
+                // gameOverCallBack();
                 console.log("rightenemy");
             }
             // Collision with the top of the Enemy

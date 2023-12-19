@@ -27,6 +27,8 @@ export class GameEnv {
     // canvas filter property
     static isInverted = true;
 
+    static gameStartOver = true; //variable for the if statement
+
     // Make the constructor private to prevent instantiation
     constructor() {
         throw new Error('GameEnv is a static class and cannot be instantiated.');
@@ -137,8 +139,6 @@ function updateTimer() {
 
 // Function to start the timer
 function startTimer() {
-
-
    // Start the timer interval, updating the timer every second (1000 milliseconds)
    timerInterval = setInterval(updateTimer, 1000);
 }

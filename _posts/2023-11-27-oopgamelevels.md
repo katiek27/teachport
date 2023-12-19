@@ -8,43 +8,55 @@ image: /images/platformer/backgrounds/hills.png
 ---
 
 <style>
-    #gameBegin, #controls, #gameOver {
-        position: relative;
-        z-index: 2; /*Ensure the controls are on top*/
-    }
-    #gameBegin, #controls, #gameOver {
-      position: relative;
-      z-index: 2; /*Ensure the controls are on top*/
-    }
-    
-    #toggleCanvasEffect, #background, #platform {
-      animation: fadein 5s;
-    }
+  #gameBegin, #controls, #gameOver, #settings {
+    position: relative;
+    z-index: 2; /*Ensure the controls are on top*/
+  }
 
-    #startGame {
-      animation: flash 0.5s infinite;
-    }
+  .sidenav {
+    position: fixed;
+    height: 100%;
+    width: 0px;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+    background-color: black;
+  }
+  
+  #toggleCanvasEffect, #background, #platform {
+    animation: fadein 1s;
+  }
 
-    @keyframes flash {
-      50% {
-        opacity: 0;
-      }
-    }
+  #startGame {
+    animation: flash 0.5s infinite;
+  }
 
-    @keyframes fadeout {
-      from {opacity: 1}
-      to {opacity: 0}
+  @keyframes flash {
+    50% {
+      opacity: 0;
     }
+  }
 
-    @keyframes fadein {
-      from {opacity: 0}
-      to {opacity: 1}
-    }
+  @keyframes fadeout {
+    from {opacity: 1}
+    to {opacity: 0}
+  }
+
+  @keyframes fadein {
+    from {opacity: 0}
+    to {opacity: 1}
+  }
 </style>
-
 <!-- Prepare DOM elements -->
 <!-- Wrap both the canvas and controls in a container div -->
 <div id="canvasContainer">
+<div id="mySidebar" class="sidenav">
+  <a href="javascript:void(0)" id="toggleSettingsBar1" class="closebtn">&times;</a>
+</div>
+<!-- Splinter -->
     <div id="gameBegin" hidden>
         <button id="startGame">Start Game</button>
     </div>
@@ -53,11 +65,15 @@ image: /images/platformer/backgrounds/hills.png
         <button id="toggleCanvasEffect">Invert</button>
         <button id="leaderboardButton">Leaderboard</button>
     </div>
+      <div id="settings"> <!-- Controls -->
+        <!-- Background controls -->
+        <button id="toggleSettingsBar">Settings</button>
+      </div>
     <div id="gameOver" hidden>
         <button id="restartGame">Restart</button>
     </div>
 </div>
-<div id="score" style="position: absolute; top: 75px; left: 10px; color: black; font-size: 20px; background-color: white;">
+<div id="score" style= "position: absolute; top: 75px; left: 10px; color: black; font-size: 20px; background-color: #dddddd; padding-left: 5px; padding-right: 5px;">
     Time: <span id="timeScore">0</span>
 </div>
 
@@ -67,7 +83,7 @@ image: /images/platformer/backgrounds/hills.png
     import GameLevel from '{{site.baseurl}}/assets/js/platformer/GameLevel.js';
     import GameControl from '{{site.baseurl}}/assets/js/platformer/GameControl.js';
     import PlatformO from '{{site.baseurl}}/assets/js/platformer/PlatformO.js';
-
+    import Controller from '{{site.baseurl}}/assets/js/platformer/Controller.js';
 
     /*  ==========================================
      *  ======= Data Definitions =================
@@ -106,7 +122,7 @@ image: /images/platformer/backgrounds/hills.png
           wa: { row: 11, frames: 15 },
           wd: { row: 10, frames: 15 },
           a: { row: 3, frames: 7, idleFrame: { column: 7, frames: 0 } },
-          s: {  },
+          s: { row: 12, frames: 15 },
           d: { row: 2, frames: 7, idleFrame: { column: 7, frames: 0 } }
         },
         monkey: {
@@ -128,9 +144,7 @@ image: /images/platformer/backgrounds/hills.png
           height: 452,
         }
       }
-    } 
-
-    // localStorage.setItem("playerScores","")
+    }
 
   // Function to switch to the leaderboard screen
     function showLeaderboard() {
@@ -217,6 +231,7 @@ document.getElementById('leaderboardButton').addEventListener('click', showLeade
 
     // Start button callback
     async function startGameCallback() {
+      startGameOver = true;
       const id = document.getElementById("gameBegin");
       id.hidden = false;
       // Use waitForRestart to wait for the restart button click
@@ -232,19 +247,34 @@ document.getElementById('leaderboardButton').addEventListener('click', showLeade
       return id.hidden;
     }
 
-    // Game Over callback
     async function gameOverCallBack() {
       const id = document.getElementById("gameOver");
       id.hidden = false;
-
+      // Store whether the game over screen has been shown before
+      const gameOverScreenShown = localStorage.getItem("gameOverScreenShown");
+      gameStartOver = true;
+      // Check if the game over screen has been shown before
+      if (gameStartOver == true) {
+        const playerScore = document.getElementById("timeScore").innerHTML;
+        const playerName = prompt(`You scored ${playerScore}! What is your name?`);
+        let temp = localStorage.getItem("playerScores");
+        temp += playerName + "," + playerScore.toString() + ";";
+        localStorage.setItem("playerScores", temp);
+        gameStartOver = false;
+      // Set a flag in local storage to indicate that the game over screen has been shown
+        localStorage.setItem("gameOverScreenShown", "true");
+      }
+      
       // Use waitForRestart to wait for the restart button click
-      await waitForButton('restartGame');
-      id.hidden = true;
-
-      // Change currentLevel to start/restart value of null
-      GameEnv.currentLevel = null;
-      return true;
-    }
+        await waitForButton('restartGame');
+        id.hidden = true;
+        
+        // Change currentLevel to start/restart value of null
+        GameEnv.currentLevel = null;
+        // Reset the flag so that the game over screen can be shown again on the next game over
+        localStorage.removeItem("gameOverScreenShown");
+        return true;
+      }
 
     /*  ==========================================
      *  ========== Game Level setup ==============
@@ -269,12 +299,23 @@ document.getElementById('leaderboardButton').addEventListener('click', showLeade
      *  ========== Game Control ==================
      *  ==========================================
     */
-
+  var myController = new Controller();
+    
     // create listeners
     toggleCanvasEffect.addEventListener('click', GameEnv.toggleInvert);
     window.addEventListener('resize', GameEnv.resize);
-    
     // start game
-    GameControl.gameLoop();
-
+   GameControl.gameLoop();
+    myController.initialize();
+    var table = myController.levelTable;
+    document.getElementById("mySidebar").append(table);
+    var r = myController.speedDiv;
+    document.getElementById("mySidebar").append(r);
+    var toggle = false;
+    function toggleWidth(){
+      toggle = !toggle;
+      document.getElementById("mySidebar").style.width = toggle?"250px":"0px";
+    }
+    document.getElementById("toggleSettingsBar").addEventListener("click",toggleWidth);
+    document.getElementById("toggleSettingsBar1").addEventListener("click",toggleWidth);
 </script>

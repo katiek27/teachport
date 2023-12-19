@@ -38,7 +38,7 @@ const GameControl = {
             // Get current level
             GameEnv.update();
             const currentLevel = GameEnv.currentLevel;
-
+            
             // currentLevel is defined
             if (currentLevel) {
                 // run the isComplete callback function

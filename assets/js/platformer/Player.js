@@ -1,6 +1,6 @@
 import GameEnv from './GameEnv.js';
 import Character from './Character.js';
-import deathController from './Death.js';
+import GameControl from './GameControl.js'
 
 // export async function gameOverCallBack() {
 //     const id = document.getElementById("gameOver");
@@ -256,7 +256,7 @@ export class Player extends Character{
         if (this.collisionData.touchPoints.other.id === "enemy") {
             // Collision with the left side of the Enemy
             if (this.collisionData.touchPoints.other.left) {
-                deathController.setDeath(1);
+                GameControl.transitionToLevel(GameEnv.levels[GameEnv.levels.indexOf(GameEnv.currentLevel)]);
                 this.destroy();
                 // waitForButton();
                 // homeScreenCallback();
@@ -265,7 +265,7 @@ export class Player extends Character{
             }
             // Collision with the right side of the Enemy
             if (this.collisionData.touchPoints.other.right) {
-                deathController.setDeath(1);
+                GameControl.transitionToLevel(GameEnv.levels[GameEnv.levels.indexOf(GameEnv.currentLevel)]);
                 this.destroy();
                 // waitForButton();
                 // homeScreenCallback();
@@ -275,7 +275,8 @@ export class Player extends Character{
             // Collision with the top of the Enemy
             if (this.collisionData.touchPoints.other.ontop) {
                 this.y -= (this.bottom * 0.33);
-                this.collisionData.touchPoints.other.destroy();
+                GameControl.transitionToLevel(GameEnv.levels[GameEnv.levels.indexOf(GameEnv.currentLevel)]);
+                // this.collisionData.touchPoints.other.destroy();
                 console.log("topenemy");
             }
         }

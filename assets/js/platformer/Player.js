@@ -2,18 +2,7 @@ import GameEnv from './GameEnv.js';
 import Character from './Character.js';
 import GameControl from './GameControl.js'
 
-// export async function gameOverCallBack() {
-//     const id = document.getElementById("gameOver");
-//     id.hidden = false;
-  
-//     // Use waitForRestart to wait for the restart button click
-//     await waitForButton('restartGame');
-//     id.hidden = true;
-  
-//     // Change currentLevel to start/restart value of null
-//     GameEnv.currentLevel = null;
-//     return true;
-//   }
+
 export  function waitForButton(buttonName) {
   // resolve the button click
   return new Promise((resolve) => {
@@ -40,27 +29,6 @@ export function homeScreenCallback() {
   // gameBegin hidden means game has started
   const id = document.getElementById("gameBegin");
   return id.hidden;
-}
-
-// Game Over callback
-export async function gameOverCallBack() {
-  const id = document.getElementById("gameOver");
-  id.hidden = false;
-
-  const playerScore = document.getElementById("timeScore").innerHTML
-  const playerName = prompt(`You scored ${playerScore}! What is your name?`)
-  let temp = localStorage.getItem("playerScores")
-
-  temp += playerName + "," + playerScore.toString() + ";";
-  localStorage.setItem("playerScores", temp)
-
-  // Use waitForRestart to wait for the restart button click
-  await waitForButton('restartGame');
-  id.hidden = true;
-
-  // Change currentLevel to start/restart value of null
-  GameEnv.currentLevel = null;
-  return true;
 }
 
 export class Player extends Character{

@@ -3,7 +3,7 @@ import Character from './Character.js';
 import GameControl from './GameControl.js'
 
 
-export  function waitForButton(buttonName) {
+export function waitForButton(buttonName) {
   // resolve the button click
   return new Promise((resolve) => {
       const waitButton = document.getElementById(buttonName);
@@ -70,7 +70,7 @@ export class Player extends Character{
         } else if (key === "d") {
             this.stashKey = key;
             this.playerData.w = this.playerData.wd;
-        }
+        } 
         // set frame and idle frame
         this.setFrameY(animation.row);
         this.setMaxFrame(animation.frames);
@@ -127,20 +127,29 @@ export class Player extends Character{
     
         return result;
     }
-    
+
 
     // Player updates
     update() {
         if (this.isAnimation("a")) {
             if (this.movement.left) this.x -= this.speed;  // Move to left
+            this.facingLeft = true;
         }
         if (this.isAnimation("d")) {
             if (this.movement.right) this.x += this.speed;  // Move to right
+            this.facingLeft = false;
         }
         if (this.isGravityAnimation("w")) {
-            if (this.movement.down) this.y -= (this.bottom * .30);  // jump 33% higher than bottom
+            if (this.movement.down) this.y -= (this.bottom * .35);  // jump 33% higher than bottom
         } 
-
+        if (this.isAnimation("s")) {
+            if (this.movement) {  // Check if movement is allowed
+                if(this.dashTimer) {
+                    const moveSpeed = this.speed * 2;
+                    this.x += this.facingLeft ? -moveSpeed : moveSpeed;
+                }
+            }
+        }
         // Perform super update actions
         super.update();
     }
@@ -226,25 +235,18 @@ export class Player extends Character{
             if (this.collisionData.touchPoints.other.left) {
                 GameControl.transitionToLevel(GameEnv.levels[GameEnv.levels.indexOf(GameEnv.currentLevel)]);
                 this.destroy();
-                // waitForButton();
-                // homeScreenCallback();
-                // gameOverCallBack();
                 console.log("leftenemy");
             }
             // Collision with the right side of the Enemy
             if (this.collisionData.touchPoints.other.right) {
                 GameControl.transitionToLevel(GameEnv.levels[GameEnv.levels.indexOf(GameEnv.currentLevel)]);
                 this.destroy();
-                // waitForButton();
-                // homeScreenCallback();
-                // gameOverCallBack();
                 console.log("rightenemy");
             }
             // Collision with the top of the Enemy
             if (this.collisionData.touchPoints.other.ontop) {
                 this.y -= (this.bottom * 0.33);
                 GameControl.transitionToLevel(GameEnv.levels[GameEnv.levels.indexOf(GameEnv.currentLevel)]);
-                // this.collisionData.touchPoints.other.destroy();
                 console.log("topenemy");
             }
         }
@@ -270,6 +272,20 @@ export class Player extends Character{
                 GameEnv.backgroundSpeed = 0.4;
             }
         };
+        if (event.key === "s") {
+            this.canvas.style.filter = 'invert(1)';
+            this.dashTimer = setTimeout(() => {
+            // Stop the player's running functions
+            clearTimeout(this.dashTimer);
+            this.dashTimer = null;
+
+            // Start cooldown timer
+            this.cooldownTimer = setTimeout(() => {
+                clearTimeout(this.cooldownTimer);
+                this.cooldownTimer = null;
+                }, 4000);
+            }, 1000);
+        }
     }
 
     // Event listener key up
@@ -291,6 +307,9 @@ export class Player extends Character{
             GameEnv.backgroundSpeed2 = 0;
             GameEnv.backgroundSpeed = 0;
             }
+        }
+        if (event.key === "s") {
+            this.canvas.style.filter = 'invert(0)'; //revert to default coloring
         }
     };
 

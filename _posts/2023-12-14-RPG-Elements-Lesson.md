@@ -2,8 +2,8 @@
 layout: post
 toc: true
 title: RPG Elements Lesson
-type: plans
-courses: { compsci: {week: 17} }
+type: collab
+courses: { csse: {week: 17} }
 authors: Maryam Abdul-Aziz, Zidane Ahmed, Abi Besufekad, Gavin Ireland
 ---
 
@@ -24,11 +24,11 @@ First we need to be able to check if the player is facing left or right to ensur
 update() {
     if (this.isAnimation("a")) {
             if (this.movement.left) this.x -= this.speed;  // Move to left
-            this.facingLeft = true; // Add this!
+            this.facingLeft = true; 
         }
         if (this.isAnimation("d")) {
             if (this.movement.right) this.x += this.speed;  // Move to right
-            this.facingLeft = false; // Add this!
+            this.facingLeft = false; 
         }
 }
 ````

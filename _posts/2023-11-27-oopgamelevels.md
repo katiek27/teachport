@@ -75,8 +75,13 @@ image: /images/platformer/backgrounds/hills.png
         <button id="restartGame">Restart</button>
     </div>
 </div>
+<div id="counters">
 <div id="score" style= "position: absolute; top: 75px; left: 10px; color: black; font-size: 20px; background-color: #dddddd; padding-left: 5px; padding-right: 5px;">
     Time: <span id="timeScore">0</span>
+</div>
+<div id="coin" style="position: absolute; top: 100px; left: 10px; color: black; font-size: 20px; background-color: #dddddd; padding-left: 5px; padding-right: 5px;">
+    Coins: <span id="coinCount">0</span>
+</div>
 </div>
 
 <script type="module">
@@ -112,6 +117,7 @@ image: /images/platformer/backgrounds/hills.png
         hills: { src: "/images/platformer/backgrounds/hills.png" },
         mountains: { src: "/images/platformer/backgrounds/mountains.jpg"},
         planet: { src: "/images/platformer/backgrounds/planet.jpg" },
+        avenida: { src: "/images/platformer/backgrounds/avenida-1.png" },
         castles: { src: "/images/platformer/backgrounds/castles.png" },
         end: { src: "/images/platformer/backgrounds/game_over.png" },
       },
@@ -138,7 +144,18 @@ image: /images/platformer/backgrounds/hills.png
           s: {  },
           d: { row: 0, frames: 15, idleFrame: { column: 7, frames: 0 } }
           // f: { row: 12, frames: 15 }
-        }
+        },
+        lopez: {
+          src: "/images/platformer/sprites/lopezanimation.png", // Modify this to match your file path
+          width: 46,
+          height: 52.5,
+          idle: { row: 6, frames: 1, idleFrame: {column: 1, frames: 0} },
+          a: { row: 1, frames: 4, idleFrame: { column: 1, frames: 0 } }, // Right Movement
+          d: { row: 2, frames: 4, idleFrame: { column: 1, frames: 0 } }, // Left Movement 
+          runningLeft: { row: 5, frames: 4, idleFrame: {column: 1, frames: 0} },
+          runningRight: { row: 4, frames: 4, idleFrame: {column: 1, frames: 0} },
+          s: {}, // Stop the movement 
+        },
       },
       enemies: {
         goomba: {
@@ -146,7 +163,10 @@ image: /images/platformer/backgrounds/hills.png
           width: 448,
           height: 452,
         }
-      }
+      },
+      scaffolds: {
+          brick: { src: "images/platformer/obstacles/brick_wall.png" }, 
+      },
     }
 
   // Function to switch to the leaderboard screen
@@ -317,9 +337,9 @@ if (!gameOverScreenShown) {
     // Game screens
     new GameLevel( {tag: "hills", background: assets.backgrounds.hills, background2: assets.backgrounds.mountains, platform: assets.platforms.grass, platformO: assets.platformO.grass, thing: assets.thing.coin, player: assets.players.mario, enemy: assets.enemies.goomba, tube: assets.obstacles.tube, callback: testerCallBack, } );
     new GameLevel( {tag: "alien", background: assets.backgrounds.planet, platform: assets.platforms.alien, player: assets.players.monkey, callback: testerCallBack } );
+    new GameLevel( {tag: "lopez", background: assets.backgrounds.avenida, platform: assets.platforms.grass, player: assets.players.lopez, enemy: assets.enemies.goomba, callback: testerCallBack } );
     // Game Over screen
     new GameLevel( {tag: "end", background: assets.backgrounds.end, callback: gameOverCallBack } );
-
 
 
     /*  ==========================================

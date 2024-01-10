@@ -116,7 +116,7 @@ image: /images/platformer/backgrounds/hills.png
       backgrounds: {
         start: { src: "/images/platformer/backgrounds/home.png" },
         hills: { src: "/images/platformer/backgrounds/hills.png" },
-        mountains: { src: "/images/platformer/backgrounds/mountains.jpg"},
+        mountains: { src: "/images/platformer/backgrounds/mountain.png"},
         planet: { src: "/images/platformer/backgrounds/planet.jpg" },
         avenida: { src: "/images/platformer/backgrounds/avenida-1.png" },
         castles: { src: "/images/platformer/backgrounds/castles.png" },

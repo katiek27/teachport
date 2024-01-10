@@ -1,7 +1,9 @@
 import GameEnv from './GameEnv.js';
 import Character from './Character.js';
 import GameControl from './GameControl.js'
+import { assets } from './Assets.js';
 
+let coin = 0
 
 export function waitForButton(buttonName) {
   // resolve the button click
@@ -154,6 +156,20 @@ export class Player extends Character{
         super.update();
     }
 
+    updateCoinCounter(coin) {
+        // Increment the coin count
+        coin++;
+
+        // Assuming you have an HTML element with the id "coinCount" to display the coin count
+        const coinCountElement = document.getElementById("coinCount");
+
+        // Update the HTML element
+        if (coinCountElement) {
+            coinCountElement.textContent = coin;
+        }
+
+        return coin; // Return the updated value if needed
+    }
     // Player action on collisions
     collisionAction() {
         if (this.collisionData.touchPoints.other.id === "tube") {
@@ -182,21 +198,35 @@ export class Player extends Character{
             this.gravityEnabled = true;
         }    
             
-        // if (this.collisionData.touchPoints.other.id === "thing2") {
-        //     // Collision with the left side of the Tube
-        //     console.log(this.collisionData.touchPoints)
-        //     if (this.collisionData.touchPoints.coin.left) {
-        //         // this.touchCoin = true;
-        //         // console.log("o")
-        //         // window.location.reload();
-        //     }
-        //     // Collision with the right side of the Tube
-        //     if (this.collisionData.touchPoints.coin.right) {
-        //         // console.log("p")
-        //         // this.touchCoin = true;
-        //         // window.location.reload();
-        //     }
-        // }     
+        let coinCountUpdated = false; // Add a flag to track whether the coin count has been updated
+
+        // Check for collision with a coin
+        if (this.collisionData.touchPoints.other.id === "thing2") {
+            // Check if the coin count has already been updated
+            if (!coinCountUpdated) {
+                // Increment the coin count
+                coin++;
+
+                // Assuming you have an HTML element with the id "coinValue" to display the coin value
+                const coinValueElement = document.getElementById("coinValue");
+                
+                const coinElement = assets.thing.coin;
+
+                if (coinElement) {
+                    // Hide or remove the coin element
+                    
+                }
+                // Update the HTML element
+                if (coinValueElement) {
+                    coinValueElement.textContent = coin;
+                }
+
+                // Set the flag to true to indicate that the coin count has been updated
+                coinCountUpdated = true;
+            }
+
+            return coin; // Return the updated value if needed
+        }    
             
           //platformO
         if (this.collisionData.touchPoints.other.id === "jumpPlatform") {
@@ -234,7 +264,7 @@ export class Player extends Character{
             // Collision with the left side of the Enemy
             if (this.collisionData.touchPoints.other.left) {
                 GameControl.transitionToLevel(GameEnv.levels[GameEnv.levels.indexOf(GameEnv.currentLevel)]);
-                this.destroy();
+                
                 console.log("leftenemy");
             }
             // Collision with the right side of the Enemy

@@ -50,6 +50,7 @@ image: /images/platformer/backgrounds/hills.png
     to {opacity: 1}
   }
 </style>
+
 <!-- Prepare DOM elements -->
 <!-- Wrap both the canvas and controls in a container div -->
 <div id="canvasContainer">
@@ -75,13 +76,13 @@ image: /images/platformer/backgrounds/hills.png
         <button id="restartGame">Restart</button>
     </div>
 </div>
+
 <div id="counters">
 <div id="score" style= "position: absolute; top: 75px; left: 10px; color: black; font-size: 20px; background-color: #dddddd; padding-left: 5px; padding-right: 5px;">
     Time: <span id="timeScore">0</span>
 </div>
-<div id="coin" style="position: absolute; top: 100px; left: 10px; color: black; font-size: 20px; background-color: #dddddd; padding-left: 5px; padding-right: 5px;">
-    Coins: <span id="coinCount">0</span>
-</div>
+<div id="coinCount" style="position: absolute; top: 100px; left: 10px; color: black; font-size: 20px; background-color: #dddddd; padding-left: 5px; padding-right: 5px;">
+    Coins: <span id="coinValue">0</span>
 </div>
 
 <script type="module">
@@ -170,7 +171,7 @@ image: /images/platformer/backgrounds/hills.png
     }
 
   // Function to switch to the leaderboard screen
-    function showLeaderboard() {
+  function showLeaderboard() {
   const id = document.getElementById("gameOver");
   id.hidden = false;
   // Hide game canvas and controls

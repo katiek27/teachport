@@ -49,6 +49,10 @@ image: /images/platformer/backgrounds/hills.png
     from {opacity: 0}
     to {opacity: 1}
   }
+
+  .center-text {
+    text-align: center;
+  }
 </style>
 
 <!-- Prepare DOM elements -->
@@ -147,14 +151,14 @@ image: /images/platformer/backgrounds/hills.png
           // f: { row: 12, frames: 15 }
         },
         lopez: {
-          src: "/images/platformer/sprites/lopezanimation.png", // Modify this to match your file path
+          src: "/images/platformer/sprites/lopezanimation.png", 
           width: 46,
           height: 52.5,
           idle: { row: 6, frames: 1, idleFrame: {column: 1, frames: 0} },
-          a: { row: 1, frames: 4, idleFrame: { column: 1, frames: 0 } }, // Right Movement
-          d: { row: 2, frames: 4, idleFrame: { column: 1, frames: 0 } }, // Left Movement 
-          runningLeft: { row: 5, frames: 4, idleFrame: {column: 1, frames: 0} },
-          runningRight: { row: 4, frames: 4, idleFrame: {column: 1, frames: 0} },
+          a: { row: 1, frames: 3, idleFrame: { column: 1, frames: 0 } }, // Right Movement
+          d: { row: 2, frames: 3, idleFrame: { column: 1, frames: 0 } }, // Left Movement 
+          runningLeft: { row: 5, frames: 3, idleFrame: {column: 1, frames: 0} },
+          runningRight: { row: 4, frames: 3, idleFrame: {column: 1, frames: 0} },
           s: {}, // Stop the movement 
         },
       },
@@ -170,10 +174,10 @@ image: /images/platformer/backgrounds/hills.png
       },
     }
 
-  // Function to switch to the leaderboard screen
-  function showLeaderboard() {
+function showLeaderboard() {
   const id = document.getElementById("gameOver");
   id.hidden = false;
+
   // Hide game canvas and controls
   document.getElementById('canvasContainer').style.display = 'none';
   document.getElementById('controls').style.display = 'none';
@@ -181,40 +185,44 @@ image: /images/platformer/backgrounds/hills.png
   // Create and display leaderboard section
   const leaderboardSection = document.createElement('div');
   leaderboardSection.id = 'leaderboardSection';
-  leaderboardSection.innerHTML = '<h1 style="text-align: center; font-size: 18px;">Leaderboard </h1>';
+  leaderboardSection.innerHTML = '<h1 style="text-align: center; font-size: 18px;">Leaderboard</h1>';
+
+  // Create a table
+  const leaderboardTable = document.createElement('table');
+  leaderboardTable.style.width = '30%';
+  leaderboardTable.style.margin = '0 auto';  // Center the table horizontally
+
+  // Create header row and format
+  const headerRow = leaderboardTable.insertRow();
+  const headerCell1 = headerRow.insertCell(0);
+  const headerCell2 = headerRow.insertCell(1);
+  headerCell1.innerHTML = '<b>Player Name</b>';
+  headerCell2.innerHTML = '<b>Time</b>';
+  headerCell1.classList.add('center-text');
+  headerCell2.classList.add('center-text');
+
+  // Get player scores from local storage
+  const playerScores = localStorage.getItem("playerScores");
+  const playerScoresArray = playerScores.split(";").filter(score => score.trim() !== "");
+
+  // Create a row for each player and add it to the table
+  playerScoresArray.forEach(playerScore => {
+    const [playerName, score] = playerScore.split(",");
+    const row = leaderboardTable.insertRow();
+    const cell1 = row.insertCell(0);
+    const cell2 = row.insertCell(1);
+    cell1.innerHTML = playerName;
+    cell2.innerHTML = score;
+
+    cell1.classList.add('center-text');
+    cell2.classList.add('center-text');
+  });
+
+  // Append the table to the leaderboard section
+  leaderboardSection.appendChild(leaderboardTable);
+
+  // Append the leaderboard section to the page content
   document.querySelector(".page-content").appendChild(leaderboardSection);
-
-  const playerScores = localStorage.getItem("playerScores")
-  const playerScoresArray = playerScores.split(";")
-  const scoresObj = {}
-  const scoresArr = []
-  for (let i = 0; i < playerScoresArray.length - 1; i++) {
-    const temp = playerScoresArray[i].split(",")
-    scoresObj[temp[0]] = parseInt(temp[1])
-    scoresArr.push(parseInt(temp[1]))
-  }
-
-  // Sort scoresArr in ascending order
-  scoresArr.sort((a, b) => a - b);
-
-  const finalScoresArr = []
-  for (let i = 0; i < scoresArr.length; i++) {
-    for (const [key, value] of Object.entries(scoresObj)) {
-      if (scoresArr[i] === value) {
-        finalScoresArr.push(key + "," + value)
-        break;
-      }
-    }
-  }
-
-  let rankScore = 1;
-  for (let i = 0; i < finalScoresArr.length; i++) {
-    const rank = document.createElement('div');
-    rank.id = `rankScore${rankScore}`;
-    rank.innerHTML = `<h2 style="text-align: center; font-size: 18px;">${finalScoresArr[i]} </h2>`;
-    document.querySelector(".page-content").appendChild(rank)
-    rankScore++;
-  }
 }
 
 // Event listener for leaderboard button to be clicked

@@ -167,7 +167,12 @@ image: /images/platformer/backgrounds/hills.png
           src: "/images/platformer/sprites/goomba.png",
           width: 448,
           height: 452,
-        }
+        },
+        student: {
+          src: "/images/platformer/sprites/student.png",
+          width: 445,
+          height: 445,
+        },
       },
       scaffolds: {
           brick: { src: "images/platformer/obstacles/brick_wall.png" }, 
@@ -346,7 +351,7 @@ if (!gameOverScreenShown) {
     // Game screens
     new GameLevel( {tag: "hills", background: assets.backgrounds.hills, background2: assets.backgrounds.mountains, platform: assets.platforms.grass, platformO: assets.platformO.grass, thing: assets.thing.coin, player: assets.players.mario, enemy: assets.enemies.goomba, tube: assets.obstacles.tube, callback: testerCallBack, } );
     new GameLevel( {tag: "alien", background: assets.backgrounds.planet, platform: assets.platforms.alien, player: assets.players.monkey, callback: testerCallBack } );
-    new GameLevel( {tag: "lopez", background: assets.backgrounds.avenida, platform: assets.platforms.grass, player: assets.players.lopez, enemy: assets.enemies.goomba, callback: testerCallBack } );
+    new GameLevel( {tag: "lopez", background: assets.backgrounds.avenida, platform: assets.platforms.grass, player: assets.players.lopez, enemy: assets.enemies.student, callback: testerCallBack } );
     // Game Over screen
     new GameLevel( {tag: "end", background: assets.backgrounds.end, callback: gameOverCallBack } );
 

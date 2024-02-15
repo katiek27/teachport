@@ -5,7 +5,7 @@ github_username: katiek27
 github_repo: "teachtwo"
 baseurl: "/teachtwo"
 future: true
-remote_theme: jekyll/minimal@v0.2.0
+remote_theme: jekyll/minima
 minima:
   social_links:
     - { platform: github, user_url: "https://github.com/nighthawkcoders/teacher_portfolio"}
